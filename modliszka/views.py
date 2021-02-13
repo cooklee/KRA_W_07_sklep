@@ -1,21 +1,24 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import View
-from datetime import datetime
+from modliszka.forms import ClientForm
+from modliszka.models import Client
 
 class IndexView(View):
     def get(self, request):
         return render(request, 'base.html', )
 
-class Index2View(View):
-    def get(self, request):
-        return render(request, 'base.html', {'active':'Ala',})
+class AddClientView(View):
 
-class Index3View(View):
     def get(self, request):
-        return render(request, 'base.html', {'active':'ma Kota',})
+        form = ClientForm()
+        return render(request, 'add_client.html', {'form':form})
 
-class Index4View(View):
-    def get(self, request):
-        return render(request, 'base.html', {'ptaszek':'sikorka',"date":'ić pan do premiera'} )
+    def post(self, request):
+        form = ClientForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            Client.objects.create(**form.cleaned_data) # Client.objects.create(first_name='adam', last_name="samosia")
+        return redirect('index')
+
