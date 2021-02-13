@@ -42,8 +42,10 @@ class AddProductView(View):
         return render(request, 'object_list_view.html', {'form':form, 'objects':products})
 
     def post(self, request):
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST)# jak sie wyświetli ten formularz w HTML dzięki request.POST bedzie wypełniony danymi
+        products = Product.objects.all()
         if form.is_valid():
             Product.objects.create(**form.cleaned_data) # Client.objects.create(first_name='adam', last_name="samosia")
-        return redirect('add_product')
+            return redirect('add_product')
+        return render(request, 'object_list_view.html', {'form': form, 'objects': products})
 
