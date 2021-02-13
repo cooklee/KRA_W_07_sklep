@@ -29,10 +29,12 @@ class AddClientView(View):
 
     def post(self, request):
         form = ClientForm(request.POST)
+        clients = Client.objects.all()
         if form.is_valid():
-            print(form.cleaned_data)
             Client.objects.create(**form.cleaned_data) # Client.objects.create(first_name='adam', last_name="samosia")
-        return redirect('add_client')
+            return redirect('add_client')
+        return render(request, 'object_list_view.html', {'form': form, "objects": clients})
+
 
 class AddProductView(View):
 
