@@ -19,5 +19,8 @@ from modliszka import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", views.IndexView.as_view(), name='index')
+    path("", views.IndexView.as_view(), name='index'),
+    path("2/", views.Index2View.as_view(), name='2'),
+    path("3/", views.Index3View.as_view(), name='3'),
+    path("4/", views.Index4View.as_view(), name='4'),
 ]
