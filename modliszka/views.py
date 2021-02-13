@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -10,28 +11,39 @@ class IndexView(View):
     def get(self, request):
         return render(request, 'base.html', )
 
+def przykladowy_widok(request):
+    context = {'dd': ' tekst  ze słownika', 'pp':"a to jest ppp"}
+    szablon = "ala ma {{dd}} kota <h1>  kot nie lubi ali</h1> <br>{{pp}}"
+    for key in context:
+        wyrazenie = '{{' +key+'}}'
+        if  wyrazenie in szablon:
+            szablon= szablon.replace(wyrazenie, context[key])
+    return HttpResponse(szablon)
+
 class AddClientView(View):
 
     def get(self, request):
+        clients = Client.objects.all()
         form = ClientForm()
-        return render(request, 'form.html', {'form':form})
+        return render(request, 'object_list_view.html', {'form':form, "objects":clients})
 
     def post(self, request):
         form = ClientForm(request.POST)
         if form.is_valid():
             print(form.cleaned_data)
             Client.objects.create(**form.cleaned_data) # Client.objects.create(first_name='adam', last_name="samosia")
-        return redirect('index')
+        return redirect('add_client')
 
 class AddProductView(View):
 
     def get(self, request):
         form = ProductForm()
-        return render(request, 'form.html', {'form':form})
+        products = Product.objects.all()
+        return render(request, 'object_list_view.html', {'form':form, 'objects':products})
 
     def post(self, request):
         form = ProductForm(request.POST)
         if form.is_valid():
             Product.objects.create(**form.cleaned_data) # Client.objects.create(first_name='adam', last_name="samosia")
-        return redirect('index')
+        return redirect('add_product')
 

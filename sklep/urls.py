@@ -20,6 +20,7 @@ from modliszka import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.IndexView.as_view(), name='index'),
+    path("ala/", views.przykladowy_widok, name='ala'),
     path("addClient/", views.AddClientView.as_view(), name='add_client'),
     path("addProduct/", views.AddProductView.as_view(), name='add_product'),
 

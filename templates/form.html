@@ -1,11 +1,6 @@
-{% extends 'base.html' %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit">
+</form>
 
-{% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="text" value="Jupika jej" name="jajko">
-        <input type="submit">
-    </form>
-
-{% endblock %}
