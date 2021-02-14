@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import View
-from django.views.generic import FormView
+from django.views.generic import FormView, CreateView
 
 from modliszka.forms import ClientForm, ProductForm, ProductModelForm, PizzaForm, ContactForm
 from modliszka.models import Client, Product, Pizza
@@ -25,20 +25,16 @@ def przykladowy_widok(request):
     return HttpResponse(szablon)
 
 
-class AddClientView(View):
+class AddClientView(CreateView):
+    template_name = 'object_list_view.html'
+    model = Client
+    fields = '__all__'
+    success_url = '/'
 
-    def get(self, request):
-        clients = Client.objects.all()
-        form = ClientForm()
-        return render(request, 'object_list_view.html', {'form': form, "objects": clients})
-
-    def post(self, request):
-        form = ClientForm(request.POST)
-        clients = Client.objects.all()
-        if form.is_valid():
-            Client.objects.create(**form.cleaned_data)  # Client.objects.create(first_name='adam', last_name="samosia")
-            return redirect('add_client')
-        return render(request, 'object_list_view.html', {'form': form, "objects": clients})
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx.update({'objects': Client.objects.all()})
+        return ctx
 
 
 class AddProductView(View):
@@ -102,3 +98,5 @@ class ContactView(FormView):
         # It should return an HttpResponse.
         form.send_email()
         return super().form_valid(form)
+
+
