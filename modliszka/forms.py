@@ -12,7 +12,8 @@ class ClientForm(forms.Form):
 
     def clean(self):
         clean_data = super().clean()
-        if clean_data.get('first_name', '').lower() == 'sławek' and clean_data.get('last_name', '').lower() == 'bogusławski':
+        if clean_data.get('first_name', '').lower() == 'sławek' and clean_data.get('last_name',
+                                                                                   '').lower() == 'bogusławski':
             raise ValidationError("Tego pana nie obsługujemy")
         return clean_data
 
@@ -23,8 +24,15 @@ class ProductForm(forms.Form):
     typ = forms.ModelChoiceField(queryset=ProductTyp.objects.all())
 
 
-
 class ProductModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['price'].widget.attrs.update({
+            'class': 'niepowtarzalna',
+            'min': 0.0,
+            'max': 10.0,
+            'step': 0.3
+        })
 
     class Meta:
         model = Product
@@ -32,9 +40,11 @@ class ProductModelForm(forms.ModelForm):
         # exclude = ['typ', 'price']
 
 
+# <input type='number' value='10' min='0.0' max='10.0' step='0.2' class='special'/>
+
 class PizzaForm(forms.Form):
     name = forms.CharField()
-    price =forms.FloatField()
+    price = forms.FloatField()
     toppings = forms.ModelMultipleChoiceField(queryset=Topping.objects.all(),
                                               widget=forms.CheckboxSelectMultiple
                                               )

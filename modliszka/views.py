@@ -39,7 +39,6 @@ class AddClientView(View):
         return render(request, 'object_list_view.html', {'form': form, "objects": clients})
 
 
-
 class AddProductView(View):
 
     def get(self, request):
@@ -55,6 +54,7 @@ class AddProductView(View):
             Product.objects.create(**form.cleaned_data)  # Client.objects.create(first_name='adam', last_name="samosia")
             return redirect('add_product')
         return render(request, 'object_list_view.html', {'form': form, 'objects': products})
+
 
 class AddProductModelFormView(View):
 
