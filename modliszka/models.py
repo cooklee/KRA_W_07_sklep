@@ -33,10 +33,16 @@ class Product(models.Model):
 
 
 class Card(models.Model):
-    products = models.ManyToManyField(Product)
+    products = models.ManyToManyField(Product, through='CarProduct')
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
 
 class Order(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product)
     date = models.DateField(auto_now_add=True)
+
+
+class CarProduct(models.Model):
+    cart = models.ForeignKey(Card, on_delete=models.CASCADE)
+    property = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
