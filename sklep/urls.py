@@ -24,5 +24,5 @@ urlpatterns = [
     path("addClient/", views.AddClientView.as_view(), name='add_client'),
     path("addProduct/", views.AddProductModelFormView.as_view(), name='add_product'),
     path("addPizza/", views.AddPizzaView.as_view(), name='add_pizza'),
-
+    path("contactForm/", views.ContactView.as_view(), name='contactForm'),
 ]

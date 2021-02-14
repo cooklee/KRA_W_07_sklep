@@ -4,7 +4,9 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import View
-from modliszka.forms import ClientForm, ProductForm, ProductModelForm, PizzaForm
+from django.views.generic import FormView
+
+from modliszka.forms import ClientForm, ProductForm, ProductModelForm, PizzaForm, ContactForm
 from modliszka.models import Client, Product, Pizza
 
 
@@ -88,3 +90,15 @@ class AddPizzaView(View):
     #         p = form.save()
     #         return redirect('add_product')
     #     return render(request, 'object_list_view.html', {'form': form, 'objects': products})
+
+
+class ContactView(FormView):
+    template_name = 'contact.html'
+    form_class = ContactForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        form.send_email()
+        return super().form_valid(form)

@@ -48,3 +48,12 @@ class PizzaForm(forms.Form):
     toppings = forms.ModelMultipleChoiceField(queryset=Topping.objects.all(),
                                               widget=forms.CheckboxSelectMultiple
                                               )
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField()
+    message = forms.CharField(widget=forms.Textarea)
+
+    def send_email(self):
+        # send email using the self.cleaned_data dictionary
+        pass
