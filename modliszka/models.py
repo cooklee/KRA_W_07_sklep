@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 # Create your models here.
@@ -17,11 +18,16 @@ class ProductTyp(models.Model):
 
     @mark_safe
     def __str__(self):
-        return self.name + "<h1> AA</h1>"
+        return self.name
+
+def check_price(value):
+    if value < 0:
+        raise ValidationError("Cena nie może być mniejsza niż zero")
 
 class Product(models.Model):
-    name = models.CharField(max_length=128)
-    price = models.FloatField()
+    name = models.CharField(max_length=128, verbose_name='Nazwa')
+    description = models.CharField(max_length=256, verbose_name="Opis", default='')
+    price = models.FloatField(verbose_name='Cena', validators=[check_price])
     typ = models.ForeignKey(ProductTyp, on_delete=models.CASCADE, null=True)
 
     def __str__(self):

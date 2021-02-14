@@ -1,7 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from modliszka.models import ProductTyp
+from modliszka.models import ProductTyp, Product
+
 
 def check_price(value):
     if value < 0:
@@ -33,3 +34,11 @@ class ProductForm(forms.Form):
     name = forms.CharField(label='Nazwa')
     price = forms.FloatField(label='Cena', validators=[check_price])
     typ = forms.ModelChoiceField(queryset=ProductTyp.objects.all())
+
+
+
+class ProductModelForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+        # exclude = ['typ', 'price']
