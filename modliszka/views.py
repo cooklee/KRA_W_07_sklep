@@ -4,8 +4,8 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import View
-from modliszka.forms import ClientForm, ProductForm, ProductModelForm
-from modliszka.models import Client, Product
+from modliszka.forms import ClientForm, ProductForm, ProductModelForm, PizzaForm
+from modliszka.models import Client, Product, Pizza
 
 
 class IndexView(View):
@@ -71,3 +71,20 @@ class AddProductModelFormView(View):
             p = form.save()
             return redirect('add_product')
         return render(request, 'object_list_view.html', {'form': form, 'objects': products})
+
+
+class AddPizzaView(View):
+
+    def get(self, request):
+        form = PizzaForm()
+        products = Pizza.objects.all()
+        return render(request, 'object_list_view.html', {'form': form, 'objects': products})
+
+    # def post(self, request):
+    #     form = ProductModelForm(
+    #         request.POST)  # jak sie wyświetli ten formularz w HTML dzięki request.POST bedzie wypełniony danymi
+    #     products = Product.objects.all()
+    #     if form.is_valid():
+    #         p = form.save()
+    #         return redirect('add_product')
+    #     return render(request, 'object_list_view.html', {'form': form, 'objects': products})

@@ -1,21 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from modliszka.models import ProductTyp, Product
-
-
-def check_price(value):
-    if value < 0:
-        raise ValidationError("Cena nie może być mniejsza niż zero")
-
-def check_length(value):
-    if len(value) < 3:
-        raise ValidationError("za krótkie")
-
-def check_if_mail(value):
-    if '@' not in value:
-        raise ValidationError("a gdzie małpa Cholero!!!")
-
+from modliszka.models import ProductTyp, Product, Topping
+from modliszka.validators import check_length, check_if_mail, check_price
 
 
 class ClientForm(forms.Form):
@@ -38,7 +25,16 @@ class ProductForm(forms.Form):
 
 
 class ProductModelForm(forms.ModelForm):
+
     class Meta:
         model = Product
         fields = '__all__'
         # exclude = ['typ', 'price']
+
+
+class PizzaForm(forms.Form):
+    name = forms.CharField()
+    price =forms.FloatField()
+    toppings = forms.ModelMultipleChoiceField(queryset=Topping.objects.all(),
+                                              widget=forms.CheckboxSelectMultiple
+                                              )

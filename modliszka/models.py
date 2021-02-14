@@ -4,9 +4,11 @@ from django.db import models
 # Create your models here.
 from django.utils.safestring import mark_safe
 
+from modliszka.validators import check_price, check_length
+
 
 class Client(models.Model):
-    first_name = models.CharField(max_length=128)
+    first_name = models.CharField(max_length=128, validators=[check_length])
     last_name = models.CharField(max_length=128)
     email = models.CharField(max_length=128, null=True)
 
@@ -20,9 +22,6 @@ class ProductTyp(models.Model):
     def __str__(self):
         return self.name
 
-def check_price(value):
-    if value < 0:
-        raise ValidationError("Cena nie może być mniejsza niż zero")
 
 class Product(models.Model):
     name = models.CharField(max_length=128, verbose_name='Nazwa')
@@ -52,3 +51,25 @@ class CarProduct(models.Model):
     cart = models.ForeignKey(Card, on_delete=models.CASCADE)
     property = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
+
+SIZES = (
+    (1, 'small'),
+    (2, 'normal'),
+    (3, 'large'),
+)
+
+class Topping(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.name
+
+class Pizza(models.Model):
+    name = models.CharField(max_length=128)
+    size = models.IntegerField(choices=SIZES)
+    toppings = models.ManyToManyField(Topping)
+    price = models.FloatField()
+
+
+
+
